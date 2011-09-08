@@ -1,0 +1,128 @@
+{#
+Copyright (c) 2011 KUBO Atsuhiro <kubo@iteman.jp>,
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+#}
+
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  {% if panel is constant('Piece\\Bundle\\MakegoodBundle\\PieceMakegoodBundle::BUNDLE_ID') %}
+  <link type="text/css" href="{{ asset('bundles/piecemakegood/vendor/jquery-ui/css/smoothness/jquery-ui-1.8.16.custom.css') }}" rel="Stylesheet" />
+  <link type="text/css" href="{{ asset('bundles/piecemakegood/css/makegood.css') }}" rel="Stylesheet" />
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/vendor/joose/lib/Task/Joose/Core.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/vendor/jquery-ui/js/jquery-1.6.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/vendor/jquery-ui/js/jquery-ui-1.8.16.custom.min.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/vendor/jsdeferred/jsdeferred.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/vendor/base64/base64.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Result/Result.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Result/ResultType.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Result/TestCaseResult.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Result/TestSuiteResult.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Run/Failures.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Run/Progress.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Core/Run/ResultReader.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Launch/TestLifecycle.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Configuration.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Context.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Widget/Counters.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Widget/ProgressBar.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/View/ResultProjector.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/View/ResultView.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/View/ResultViewController.js') }}"></script>
+  <style type="text/css">
+#piecemakegood-progressbar {
+  position:relative;
+  height: 24px;
+}
+.piecemakegood-progressbar-label {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  line-height: 24px;
+}
+.piecemakegood-action-runalltests {
+  background-image: url("{{ asset('bundles/piecemakegood/images/action_runalltests.png') }}") !important;
+}
+  </style>
+  <script>
+jQuery(function() {
+    (new Piece.MakeGood.UI.Context()).create({
+        assetBaseURI: "{{ asset('bundles/piecemakegood') }}",
+        resultURI: "{{ path('PieceMakegoodBundle_Result_show') }}"
+    });
+});
+  </script>
+  {% endif %}
+{% endblock %}
+
+{% block toolbar %}
+  {% set icon %}
+    <img alt="MakeGood Icon" style="border-width: 0; vertical-align: middle; margin-right: 5px;" src="data:image/gif;base64,R0lGODlhEAAQAOZdADOaADOaM5ozM1UAAJozAGbNZkQAAGYAADNmM2bNM2aaZs1mZppmM5rNMzMAAGbNAJpmZjMzADPNM/n5+WaammYzAI3BWolWJJXJla6NjcfHxwBmM8XFxad0QtLS0ppmAG48PKamprOzgWaaM1e+JU2AgLLksiIiIp6enn+xf3yvSnpqaqh1dXRCQrJ9GKxFE3s4OLe3t6qqqkkGBo7BXEZ5RnwoKKt2Q34qKmAMDKurq7y8vLRNTc2ampvOaXGlDGMgIOHhrpKSYJpXV5w1A4QfHz6lPprNmno3N93d3dDQnUJ1Qs3Nm7Kysm7VPF8tLYhFRXNzQDifODWcNaTXPTOaZqTX1z1wPc0zZpVSUm1tOp9sOjQ0AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAF0ALAAAAAAQABAAAAetgF2Cg4SFhl1KFkZSU1clGDKFQVQNCQAAAQEFR1aEPpWWmAEKBRQxg0wPD5eZAVUFpTsagiSXrK0FEgo9KF0mlwi2oroLCyxdKQgIG8IAIwwQCxA6XSoVFRERNU4/DALfWDyCSycDBjMZEzff7E1dNFwOBw4gE0kvBPkCW4MrAwcGcjxpcUFfFEJDzCkE0uEDAS0cCNlA8u8ADEEuiIQ4hCMLlCKCRAg5RNJDoUAAOw==" />
+  {% endset %}
+  {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+<span class="label">
+  <span class="icon">
+    <img src="{{ asset('bundles/piecemakegood/images/makegood_32.png') }}" alt="MakeGood Icon" />
+    </span>
+    <strong>TESTING</strong>
+</span>
+{% endblock %}
+
+{% block panel %}
+<div id="piecemakegood-notification"></div>
+<div id="piecemakegood-status"></div>
+<div id="piecemakegood-controlpanel">
+  <button id="piecemakegood-action-runalltests"></button>
+</div>
+<div id="piecemakegood-result">
+  <div id="piecemakegood-progressbar" class="ui-progressbar">
+    <span class="piecemakegood-progressbar-label"></span>
+  </div>
+  <div id="piecemakegood-counter">
+    <span id="piecemakegood-counter-test">
+      <span id="piecemakegood-counter-test-label"></span>
+      <span id="piecemakegood-counter-test-value-current"></span>/<span id="piecemakegood-counter-test-value-all"></span>
+    </span>
+    <span id="piecemakegood-counter-pass">
+      <img src="{{ asset('bundles/piecemakegood/images/counter_pass.png') }}" alt="MakeGood Icon" />
+      <span id="piecemakegood-counter-pass-label"></span>
+      <span id="piecemakegood-counter-pass-value"></span>
+    </span>
+    <span id="piecemakegood-counter-failure">
+      <img src="{{ asset('bundles/piecemakegood/images/counter_failure.png') }}" alt="MakeGood Icon" />
+      <span id="piecemakegood-counter-failure-label"></span>
+      <span id="piecemakegood-counter-failure-value"></span>
+    </span>
+    <span id="piecemakegood-counter-error">
+      <img src="{{ asset('bundles/piecemakegood/images/counter_error.png') }}" alt="MakeGood Icon" />
+      <span id="piecemakegood-counter-error-label"></span>
+      <span id="piecemakegood-counter-error-value"></span>
+    </span>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Spec Runner: MakeGood</title>
+
+  <link rel="shortcut icon" type="image/png" href="../../vendor/jasmine/lib/jasmine-1.1.0.rc1/jasmine_favicon.png">
+
+  <link rel="stylesheet" type="text/css" href="../../vendor/jasmine/lib/jasmine-1.1.0.rc1/jasmine.css">
+  <script type="text/javascript" src="../../vendor/jasmine/lib/jasmine-1.1.0.rc1/jasmine.js"></script>
+  <script type="text/javascript" src="../../vendor/jasmine/lib/jasmine-1.1.0.rc1/jasmine-html.js"></script>
+  <script type="text/javascript" src="../../vendor/jshamcrest/jshamcrest-min.js"></script>
+  <script type="text/javascript" src="../../vendor/jsmockito/jsmockito-1.0.4-minified.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="../../vendor/joose/lib/Task/Joose/Core.js"></script>
+  <script type="text/javascript" src="../src/Piece/MakeGood/Core/Result/Result.js"></script>
+  <script type="text/javascript" src="../src/Piece/MakeGood/Core/Result/ResultType.js"></script>
+  <script type="text/javascript" src="../src/Piece/MakeGood/Core/Result/TestCaseResult.js"></script>
+  <script type="text/javascript" src="../src/Piece/MakeGood/Core/Result/TestSuiteResult.js"></script>
+  <script type="text/javascript" src="../src/Piece/MakeGood/Core/Run/Progress.js"></script>
+  <script type="text/javascript" src="../src/Piece/MakeGood/Core/Run/ResultReader.js"></script>
+
+  <!-- include spec files here... -->
+  <script type="text/javascript" src="ProgressSpec.js"></script>
+  <script type="text/javascript" src="ResultReaderSpec.js"></script>
+  
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var trivialReporter = new jasmine.TrivialReporter();
+
+      jasmineEnv.addReporter(trivialReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return trivialReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>
