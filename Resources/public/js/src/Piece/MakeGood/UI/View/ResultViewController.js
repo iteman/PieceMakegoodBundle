@@ -57,6 +57,12 @@ Module("Piece", function () {
                             var self = this;
                             var testLifecycle = new Piece.MakeGood.Launch.TestLifecycle({
                                 testRunURI: this.configuration.getTestRunURI(),
+                                // consoleWriter: new Piece.MakeGood.UI.View.ConsoleWriter({
+                                //     view: this.view
+                                // }),
+                                resultReaderListener: new Piece.MakeGood.UI.View.ResultProjector({
+                                    view: this.view
+                                }),
                                 onEnd: function () {
                                 },
                                 onError: function (e) {
@@ -64,9 +70,7 @@ Module("Piece", function () {
                                 }
                             });
                             this.view.startTest(testLifecycle);
-                            testLifecycle.start(new Piece.MakeGood.UI.View.ResultProjector({
-                                view: this.view
-                            }));
+                            testLifecycle.start();
                         }
                     }
                 })

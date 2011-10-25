@@ -51,6 +51,8 @@ Module("Piece", function () {
                     progress: { init: new Piece.MakeGood.Core.Run.Progress() },
                     failures: { init: new Piece.MakeGood.Core.Run.Failures() },
                     testRunURI: {},
+                    consoleWriter: {},
+                    resultReaderListener: {},
                     onEnd: {},
                     onError: {}
                 },
@@ -58,6 +60,8 @@ Module("Piece", function () {
                 after: {
                     initialize: function (props) {
                         this.testRunURI = props.testRunURI;
+                        this.consoleWriter = props.consoleWriter;
+                        this.resultReaderListener = props.resultReaderListener;
                         this.onEnd = props.onEnd;
                         this.onError = props.onError;
                     },
@@ -65,10 +69,11 @@ Module("Piece", function () {
                 },
 
                 methods: {
-                    start: function (resultReaderListener) {
+                    start: function () {
                         this.progress.start();
-                        var testRunID = 'foo';
-                        this.readResult(this.createResultReader(resultReaderListener), testRunID);
+                        // var testRunID = this.runTest();
+                        var testRunID = "foo";
+                        this.readResult(testRunID);
                     },
 
                     end: function () {
@@ -80,32 +85,71 @@ Module("Piece", function () {
                         return this.progress;
                     },
 
-                    createResultReader: function (resultReaderListener) {
-                        var resultReader = new Piece.MakeGood.Core.Run.ResultReader();
-                        resultReader.addListener(this.progress);
-                        resultReader.addListener(this.failures);
-                        resultReader.addListener(resultReaderListener);
-                        return resultReader;
-                    },
-
-                    readResult: function(resultReader, testRunID) {
+                    runTest: function () {
                         var self = this;
                         if (!window.XMLHttpRequest) {
                             throw new Error("Cannot use XMLHttpRequest objects.");
                         }
                         var xhr = new XMLHttpRequest();
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState == 4) {
-                                if (xhr.status == 200) {
-                                    console.log("HTTP Response Finished.");
-                                } else {
-                                    console.log("HTTP Status Code is not 200 (" + xhr.status + ")");
+                        xhr.open("POST", this.testRunURI);
+                        xhr.send();
+
+                        var chunkOffset = 0;
+                        Deferred.next(function () {
+                            switch (xhr.readyState) {
+                            case self.my.READYSTATE_UNSENT:
+                            case self.my.READYSTATE_OPENED:
+                            case self.my.READYSTATE_HEADERS_RECEIVED:
+                                break;
+                            case self.my.READYSTATE_LOADING:
+                            case self.my.READYSTATE_DONE:
+                                if (xhr.status != 200) {
+                                    throw new Error("The HTTP status code [ " + xhr.status + " ] has been returned by [ " + self.testRunURI + " ].");
                                 }
+                                if (xhr.responseText.length == 0) return Deferred.next(arguments.callee);
+                                var chunkSizeEndOffset = xhr.responseText.indexOf(";", chunkOffset);
+                                if (chunkSizeEndOffset == -1) return Deferred.next(arguments.callee);
+                                var chunkDataStartOffset = chunkSizeEndOffset + 1;
+                                var chunkSize = parseInt(xhr.responseText.substr(chunkOffset, chunkSizeEndOffset - chunkOffset));
+                                var chunkDataEndOffset = xhr.responseText.indexOf(";", chunkDataStartOffset + chunkSize);
+                                if (chunkDataEndOffset == -1) return Deferred.next(arguments.callee);
+
+                                var chunkData = Base64.decode(xhr.responseText.substr(chunkDataStartOffset, chunkSize)).trim();
+                                if (chunkData.length > 0) {
+                                    self.consoleWriter.write(chunkData);
+                                }
+
+                                chunkOffset = chunkDataEndOffset + 1;
+                                break;
                             }
+
+                            return Deferred.next(arguments.callee);
+                        }).error(function (e) {
+                            self.end();
+                            if (e != self.my.STATE_SUCCESS) {
+                                self.onError(e);
+                            }
+                        });
+                    },
+
+                    createResultReader: function () {
+                        var resultReader = new Piece.MakeGood.Core.Run.ResultReader();
+                        resultReader.addListener(this.progress);
+                        resultReader.addListener(this.failures);
+                        resultReader.addListener(this.resultReaderListener);
+                        return resultReader;
+                    },
+
+                    readResult: function(testRunID) {
+                        var self = this;
+                        if (!window.XMLHttpRequest) {
+                            throw new Error("Cannot use XMLHttpRequest objects.");
                         }
+                        var xhr = new XMLHttpRequest();
                         xhr.open("GET", this.testRunURI + "/" + encodeURIComponent(testRunID));
                         xhr.send();
 
+                        var resultReader = this.createResultReader();
                         var chunkOffset = 0;
                         Deferred.next(function () {
                             switch (xhr.readyState) {
