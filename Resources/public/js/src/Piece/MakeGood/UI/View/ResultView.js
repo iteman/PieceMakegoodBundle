@@ -96,7 +96,7 @@ Module("Piece", function () {
                                 configuration: this.configuration
                             });
                             this.counters = new Piece.MakeGood.UI.Widget.Counters();
-                            // this.console = new Piece.MakeGood.UI.Widget.Console();
+                            this.console = new Piece.MakeGood.UI.Widget.Console();
                         },
 
                         updateResult: function () {

@@ -46,6 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
   <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/Launch/TestLifecycle.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Configuration.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Context.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Widget/Console.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Widget/Counters.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/Widget/ProgressBar.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bundles/piecemakegood/js/src/Piece/MakeGood/UI/View/ResultProjector.js') }}"></script>
@@ -71,10 +72,6 @@ jQuery(function() {
     (new Piece.MakeGood.UI.Context()).create({
         assetBaseURI: "{{ asset('bundles/piecemakegood') }}",
         testRunURI: "{{ path('PieceMakegoodBundle_TestRun_run') }}"
-    });
-    jQuery("#piecemakegood-console-content").toggle();
-    jQuery("#piecemakegood-console-header").click(function () {
-        jQuery("#piecemakegood-console-content").toggle("blind", {}, 500);
     });
 });
   </script>
