@@ -38,13 +38,13 @@ Module("Piece", function () {
             Class("Configuration", {
                 has: {
                     assetBaseURI: { is: "ro" },
-                    resultURI: { is: "ro" },
+                    testRunURI: { is: "ro" },
                 },
 
                 after: {
                     initialize: function (props) {
                         this.assetBaseURI = props.assetBaseURI;
-                        this.resultURI = props.resultURI;
+                        this.testRunURI = props.testRunURI;
                     }
                 }
             })

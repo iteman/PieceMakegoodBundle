@@ -38,6 +38,7 @@ Module("Piece", function () {
             Module("View", function () {
                 Class("ResultView", {
                     has: {
+                        controller: {},
                         configuration: {},
                         progressBar: {},
                         testLifecycle: {},

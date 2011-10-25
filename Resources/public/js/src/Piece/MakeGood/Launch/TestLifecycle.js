@@ -50,14 +50,14 @@ Module("Piece", function () {
                 has: {
                     progress: { init: new Piece.MakeGood.Core.Run.Progress() },
                     failures: { init: new Piece.MakeGood.Core.Run.Failures() },
-                    resultURI: {},
+                    testRunURI: {},
                     onEnd: {},
                     onError: {}
                 },
 
                 after: {
                     initialize: function (props) {
-                        this.resultURI = props.resultURI;
+                        this.testRunURI = props.testRunURI;
                         this.onEnd = props.onEnd;
                         this.onError = props.onError;
                     },
@@ -67,7 +67,8 @@ Module("Piece", function () {
                 methods: {
                     start: function (resultReaderListener) {
                         this.progress.start();
-                        this.readResult(this.createResultReader(resultReaderListener));
+                        var testRunID = 'foo';
+                        this.readResult(this.createResultReader(resultReaderListener), testRunID);
                     },
 
                     end: function () {
@@ -87,7 +88,7 @@ Module("Piece", function () {
                         return resultReader;
                     },
 
-                    readResult: function(resultReader) {
+                    readResult: function(resultReader, testRunID) {
                         var self = this;
                         if (!window.XMLHttpRequest) {
                             throw new Error("Cannot use XMLHttpRequest objects.");
@@ -102,7 +103,7 @@ Module("Piece", function () {
                                 }
                             }
                         }
-                        xhr.open("GET", this.resultURI);
+                        xhr.open("GET", this.testRunURI + "/" + encodeURIComponent(testRunID));
                         xhr.send();
 
                         var chunkOffset = 0;
@@ -110,14 +111,13 @@ Module("Piece", function () {
                             switch (xhr.readyState) {
                             case self.my.READYSTATE_UNSENT:
                             case self.my.READYSTATE_OPENED:
-                                break;
                             case self.my.READYSTATE_HEADERS_RECEIVED:
-                                if (xhr.status != 200) {
-                                    throw new Error("The HTTP status code [ " + xhr.status + " ] has been returned by [ " + self.resultURI + " ].");
-                                }
                                 break;
                             case self.my.READYSTATE_LOADING:
                             case self.my.READYSTATE_DONE:
+                                if (xhr.status != 200) {
+                                    throw new Error("The HTTP status code [ " + xhr.status + " ] has been returned by [ " + self.testRunURI + " ].");
+                                }
                                 if (xhr.responseText.length == 0) return Deferred.next(arguments.callee);
                                 var chunkSizeEndOffset = xhr.responseText.indexOf(";", chunkOffset);
                                 if (chunkSizeEndOffset == -1) return Deferred.next(arguments.callee);
@@ -135,6 +135,7 @@ Module("Piece", function () {
                                 }
 
                                 chunkOffset = chunkDataEndOffset + 1;
+                                break;
                             }
 
                             return Deferred.next(arguments.callee);

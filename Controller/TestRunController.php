@@ -51,7 +51,7 @@ use Piece\Bundle\MakegoodBundle\Response\ChunkResponse;
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ResultController extends Controller implements ChunkContainer
+class TestRunController extends Controller implements ChunkContainer
 {
     protected $resultAsJSON = array(
 "{\"testsuites\": null}",
@@ -118,7 +118,11 @@ class ResultController extends Controller implements ChunkContainer
         return new Chunk($data, $isLast);
     }
 
-    public function showAction()
+    public function runAction()
+    {
+    }
+
+    public function showAction($testRunID)
     {
         $this->container->get('profiler')->disable();
         return new ChunkResponse($this, 200, array('Content-Type' => 'application/json'));

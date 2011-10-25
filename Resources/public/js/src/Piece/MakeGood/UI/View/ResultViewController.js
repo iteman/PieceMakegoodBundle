@@ -56,7 +56,7 @@ Module("Piece", function () {
                         runTest: function () {
                             var self = this;
                             var testLifecycle = new Piece.MakeGood.Launch.TestLifecycle({
-                                resultURI: this.configuration.getResultURI(),
+                                testRunURI: this.configuration.getTestRunURI(),
                                 onEnd: function () {
                                 },
                                 onError: function (e) {
