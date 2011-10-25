@@ -42,7 +42,8 @@ Module("Piece", function () {
                         configuration: {},
                         progressBar: {},
                         testLifecycle: {},
-                        counters: {}
+                        counters: {},
+                        console: {}
                     },
 
                     after: {
@@ -58,6 +59,7 @@ Module("Piece", function () {
                         clear: function () {
                             this.progressBar.clear();
                             this.counters.clear();
+                            this.console.clear();
                         },
 
                         updateOnEndTestCase: function () {
@@ -94,6 +96,7 @@ Module("Piece", function () {
                                 configuration: this.configuration
                             });
                             this.counters = new Piece.MakeGood.UI.Widget.Counters();
+                            // this.console = new Piece.MakeGood.UI.Widget.Console();
                         },
 
                         updateResult: function () {

@@ -72,7 +72,10 @@ jQuery(function() {
         assetBaseURI: "{{ asset('bundles/piecemakegood') }}",
         testRunURI: "{{ path('PieceMakegoodBundle_TestRun_run') }}"
     });
-    jQuery("#piecemakegood-tabs").tabs();
+    jQuery("#piecemakegood-console-content").toggle();
+    jQuery("#piecemakegood-console-header").click(function () {
+        jQuery("#piecemakegood-console-content").toggle("blind", {}, 500);
+    });
 });
   </script>
   {% endif %}
@@ -97,45 +100,35 @@ jQuery(function() {
 {% block panel %}
 <div id="piecemakegood-notification"></div>
 <div id="piecemakegood-status"></div>
-<div id="piecemakegood-tabs">
-  <ul>
-    <li><a href="#piecemakegood-tabs-1">Control Panel</a></li>
-    <li><a href="#piecemakegood-tabs-2">Console</a></li>
-  </ul>
-  <div id="piecemakegood-tabs-1">
-    <div id="piecemakegood-controlpanel">
-      <button id="piecemakegood-action-runalltests"></button>
-    </div>
-    <div id="piecemakegood-result">
-      <div id="piecemakegood-progressbar" class="ui-progressbar">
-        <span class="piecemakegood-progressbar-label"></span>
-      </div>
-      <div id="piecemakegood-counter">
-        <span id="piecemakegood-counter-test">
-          <span id="piecemakegood-counter-test-label"></span>
-          <span id="piecemakegood-counter-test-value-current"></span>/<span id="piecemakegood-counter-test-value-all"></span>
-        </span>
-        <span id="piecemakegood-counter-pass">
-          <img src="{{ asset('bundles/piecemakegood/images/counter_pass.png') }}" alt="MakeGood Icon" />
-          <span id="piecemakegood-counter-pass-label"></span>
-          <span id="piecemakegood-counter-pass-value"></span>
-        </span>
-        <span id="piecemakegood-counter-failure">
-          <img src="{{ asset('bundles/piecemakegood/images/counter_failure.png') }}" alt="MakeGood Icon" />
-          <span id="piecemakegood-counter-failure-label"></span>
-          <span id="piecemakegood-counter-failure-value"></span>
-        </span>
-        <span id="piecemakegood-counter-error">
-          <img src="{{ asset('bundles/piecemakegood/images/counter_error.png') }}" alt="MakeGood Icon" />
-          <span id="piecemakegood-counter-error-label"></span>
-          <span id="piecemakegood-counter-error-value"></span>
-        </span>
-      </div>
-    </div>
-  </div>
-  <div id="piecemakegood-tabs-2">
-    <div id="piecemakegood-console">
-    </div>
-  </div>
+<div id="piecemakegood-controlpanel">
+  <button id="piecemakegood-action-runalltests"></button>
+</div>
+<div id="piecemakegood-progressbar" class="ui-progressbar">
+  <span class="piecemakegood-progressbar-label"></span>
+</div>
+<div id="piecemakegood-counter">
+  <span id="piecemakegood-counter-test">
+    <span id="piecemakegood-counter-test-label"></span>
+    <span id="piecemakegood-counter-test-value-current"></span>/<span id="piecemakegood-counter-test-value-all"></span>
+  </span>
+  <span id="piecemakegood-counter-pass">
+    <img src="{{ asset('bundles/piecemakegood/images/counter_pass.png') }}" alt="MakeGood Icon" />
+    <span id="piecemakegood-counter-pass-label"></span>
+    <span id="piecemakegood-counter-pass-value"></span>
+  </span>
+  <span id="piecemakegood-counter-failure">
+    <img src="{{ asset('bundles/piecemakegood/images/counter_failure.png') }}" alt="MakeGood Icon" />
+    <span id="piecemakegood-counter-failure-label"></span>
+    <span id="piecemakegood-counter-failure-value"></span>
+  </span>
+  <span id="piecemakegood-counter-error">
+    <img src="{{ asset('bundles/piecemakegood/images/counter_error.png') }}" alt="MakeGood Icon" />
+    <span id="piecemakegood-counter-error-label"></span>
+    <span id="piecemakegood-counter-error-value"></span>
+  </span>
+</div>
+<div id="piecemakegood-console" class="ui-widget-content ui-corner-all">
+  <h3 id="piecemakegood-console-header" class="ui-widget-header ui-corner-all">Console</h3>
+  <div id="piecemakegood-console-content"></div>
 </div>
 {% endblock %}
